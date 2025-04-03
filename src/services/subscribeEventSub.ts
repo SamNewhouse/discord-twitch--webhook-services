@@ -1,7 +1,4 @@
 import axios from "axios";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const CLIENT_ID = process.env.TWITCH_CLIENT_ID;
 const OAUTH_TOKEN = process.env.TWITCH_OAUTH_TOKEN;

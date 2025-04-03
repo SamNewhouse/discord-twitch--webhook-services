@@ -7,8 +7,7 @@ const HomePage: NextPage = () => {
   const handleLiveClick = async () => {
     try {
       console.log("📤 Sending live message to Discord...");
-      const message = "Twitch stream is now online!";
-      await postToDiscord(message);
+      await postToDiscord();
     } catch (error) {
       console.error("❌ Error:", error);
     }

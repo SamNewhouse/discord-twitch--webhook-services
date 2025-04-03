@@ -13,13 +13,15 @@ if (CHANNEL_IDS.length === 0) {
   );
 }
 
-export const postToDiscord = async (message: string) => {
+const discordMessage = `🎉 I'm live and streaming right now! Come join me for some fun and hang out! 😊 https://twitch.tv/enzly`;
+
+export const postToDiscord = async () => {
   try {
     for (const channelId of CHANNEL_IDS) {
       const response = await axios.post(
         `https://discord.com/api/v10/channels/${channelId}/messages`,
         {
-          content: message,
+          content: discordMessage,
         },
         {
           headers: {
