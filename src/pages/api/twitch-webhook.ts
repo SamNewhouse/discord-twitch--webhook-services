@@ -15,14 +15,11 @@ export default async function handler(
 
       console.log("Received event data:", eventData);
 
-      // Check if the event is about stream going live
       if (eventData?.subscription?.type === "stream.online") {
         console.log("Stream is now online!");
-        // Send a message to Discord about the stream
         await postToDiscord();
       }
 
-      // Respond back with a success message
       return res.status(200).json({ message: "Event received and processed" });
     } catch (error) {
       console.error("❌ Error processing event:", error);

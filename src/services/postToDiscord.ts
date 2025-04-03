@@ -22,16 +22,15 @@ const discordMessage = `🎉 I'm live! Come hang out with me! 😊 https://twitc
 
 export const postToDiscord = async () => {
   try {
-    // Post to each channel listed in DISCORD_CHANNELS
     for (const channelId of CHANNEL_IDS) {
       const response = await axios.post(
         `https://discord.com/api/v10/channels/${channelId}/messages`,
         {
-          content: discordMessage, // The message to post
+          content: discordMessage,
         },
         {
           headers: {
-            Authorization: `Bearer ${DISCORD_TOKEN}`, // Make sure to add 'Bearer'
+            Authorization: `${DISCORD_TOKEN}`,
             "Content-Type": "application/json",
           },
         }
