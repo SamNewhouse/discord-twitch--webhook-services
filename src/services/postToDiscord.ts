@@ -5,14 +5,12 @@ const CHANNEL_IDS: string[] = process.env.DISCORD_CHANNELS?.split(",") || [];
 
 if (!DISCORD_TOKEN) {
   console.error("❌ Missing DISCORD_TOKEN environment variable");
-  process.exit(1);
 }
 
 if (CHANNEL_IDS.length === 0) {
   console.error(
     "❌ Missing DISCORD_CHANNELS environment variable or it is empty"
   );
-  process.exit(1);
 }
 
 export const postToDiscord = async (message: string) => {
@@ -25,7 +23,7 @@ export const postToDiscord = async (message: string) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${DISCORD_TOKEN}`,
+            Authorization: DISCORD_TOKEN,
             "Content-Type": "application/json",
           },
         }
@@ -35,10 +33,7 @@ export const postToDiscord = async (message: string) => {
     }
   } catch (error: any) {
     if (error.response) {
-      console.error(
-        "❌ Error posting to Discord:",
-        error.response?.data || error.message
-      );
+      console.error("❌ Error posting to Discord:", error.response.data);
     } else {
       console.error("❌ Unexpected error:", error);
     }

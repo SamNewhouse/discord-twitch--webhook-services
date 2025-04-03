@@ -9,8 +9,8 @@ export const validateWebhook = (
 ): boolean => {
   const signature = req.headers["x-hub-signature"];
   if (!signature || !WEBHOOK_SECRET) {
-    res.status(400).json({ error: "Invalid webhook signature" });
-    return false; // Return false when validation fails
+    console.error("❌ Missing signature or secret");
+    return false;
   }
 
   const body = JSON.stringify(req.body);
@@ -20,9 +20,9 @@ export const validateWebhook = (
     .digest("hex")}`;
 
   if (signature !== hash) {
-    res.status(400).json({ error: "Invalid webhook signature" });
-    return false; // Return false when validation fails
+    console.error("❌ Invalid signature");
+    return false;
   }
 
-  return true; // Return true when validation succeeds
+  return true;
 };
