@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+const TWITCH_USERNAME = process.env.TWITCH_USERNAME;
 const CHANNEL_IDS: string[] = process.env.DISCORD_CHANNELS?.split(",") || [];
 
 if (!DISCORD_TOKEN) {
@@ -13,7 +14,7 @@ if (CHANNEL_IDS.length === 0) {
   );
 }
 
-const discordMessage = `🎉 I'm live and streaming right now! Come join me for some fun and hang out! 😊 https://twitch.tv/enzly`;
+const discordMessage = `🎉 I'm live! Come hang out with me! 😊 https://twitch.tv/${TWITCH_USERNAME}`;
 
 export const postToDiscord = async () => {
   try {
