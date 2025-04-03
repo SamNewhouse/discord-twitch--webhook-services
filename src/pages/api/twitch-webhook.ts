@@ -1,23 +1,36 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { postToDiscord } from "../../services/postToDiscord";
 
-// Your secret key, set in the environment variables
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+const TWITCH_USER_ID = process.env.TWITCH_USER_ID;
+const TWITCH_USERNAME = process.env.TWITCH_USERNAME;
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Handle incoming event data from Twitch
   if (req.method === "POST") {
     try {
       const eventData = req.body;
 
-      console.log("Received event data:", eventData);
+      console.log(
+        "Received Twitch event data:",
+        JSON.stringify(eventData, null, 2)
+      );
 
       if (eventData?.subscription?.type === "stream.online") {
-        console.log("Stream is now online!");
-        await postToDiscord();
+        const broadcasterId = eventData.data[0]?.broadcaster_user_id;
+        const broadcasterName = eventData.data[0]?.broadcaster_user_name;
+
+        console.log(`Event Data for Stream Online:`);
+        console.log(`- broadcaster_user_id: ${broadcasterId}`);
+        console.log(`- broadcaster_user_name: ${broadcasterName}`);
+
+        if (broadcasterId === TWITCH_USER_ID) {
+          console.log(`Stream is now online: ${TWITCH_USERNAME}`);
+          await postToDiscord();
+        } else {
+          console.log(`Stream event received, but not for: ${TWITCH_USERNAME}`);
+        }
       }
 
       return res.status(200).json({ message: "Event received and processed" });
@@ -27,6 +40,5 @@ export default async function handler(
     }
   }
 
-  // Default response for unsupported HTTP methods
   return res.status(405).json({ message: "Method Not Allowed" });
 }
