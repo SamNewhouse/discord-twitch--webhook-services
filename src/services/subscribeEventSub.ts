@@ -2,7 +2,9 @@ import axios from "axios";
 
 const CLIENT_ID = process.env.TWITCH_CLIENT_ID;
 const OAUTH_TOKEN = process.env.TWITCH_OAUTH_TOKEN;
-const CALLBACK_URL = process.env.WEBHOOK_URL || "https://localhost:3000";
+const CALLBACK_URL =
+  process.env.WEBHOOK_URL ||
+  "https://discord-twitch-webhook-services.vercel.app/api/twitch-webhook"; // Default to your URL if undefined
 const USER_ID = process.env.TWITCH_USER_ID;
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
@@ -12,6 +14,8 @@ if (!CLIENT_ID || !OAUTH_TOKEN || !USER_ID || !WEBHOOK_SECRET) {
 }
 
 export const subscribeToEventSub = async () => {
+  console.log("🚨 CALLBACK_URL", CALLBACK_URL); // Debugging the callback URL
+
   try {
     const response = await axios.post(
       "https://api.twitch.tv/helix/eventsub/subscriptions",
@@ -23,7 +27,7 @@ export const subscribeToEventSub = async () => {
         },
         transport: {
           method: "webhook",
-          callback: CALLBACK_URL,
+          callback: CALLBACK_URL, // Make sure the URL is correct
           secret: WEBHOOK_SECRET,
         },
       },
@@ -35,6 +39,7 @@ export const subscribeToEventSub = async () => {
       }
     );
     console.log("✅ EventSub subscription successful:", response.status);
+    return response.data;
   } catch (error: any) {
     if (error.response) {
       console.error(
@@ -44,5 +49,6 @@ export const subscribeToEventSub = async () => {
     } else {
       console.error("❌ Unexpected error:", error);
     }
+    throw new Error("Failed to subscribe to EventSub");
   }
 };

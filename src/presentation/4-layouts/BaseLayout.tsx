@@ -1,19 +1,15 @@
-import React, { FC, memo, PropsWithChildren, ReactNode } from "react";
+import { FC, memo, PropsWithChildren, ReactNode } from "react";
 
 interface Props {
   children?: ReactNode;
   className?: string;
 }
 
-const BaseLayout: FC<Props> = ({ children, className }) => {
+const BaseLayout: FC<Props> = ({ children, className = "" }) => {
   return (
-    <>
-      <div
-        className={`max-w-(--breakpoint-lg) mx-auto${className ? " " + className : ""}`}
-      >
-        {children}
-      </div>
-    </>
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${className}`}>
+      {children}
+    </div>
   );
 };
 

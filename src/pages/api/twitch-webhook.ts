@@ -3,6 +3,8 @@ import { postToDiscord } from "../../services/postToDiscord";
 
 const TWITCH_USER_ID = process.env.TWITCH_USER_ID;
 const TWITCH_USERNAME = process.env.TWITCH_USERNAME;
+const DISCORD_CHANNELS = process.env.DISCORD_CHANNELS?.split(",") || [];
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN!;
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,7 +13,6 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const eventData = req.body;
-
       console.log(
         "Received Twitch event data:",
         JSON.stringify(eventData, null, 2)
@@ -27,7 +28,16 @@ export default async function handler(
 
         if (broadcasterId === TWITCH_USER_ID) {
           console.log(`Stream is now online: ${TWITCH_USERNAME}`);
-          await postToDiscord();
+
+          // Construct message
+          const message = `🎉 I'm live! Come hang out with me! 😊 https://twitch.tv/${TWITCH_USERNAME}`;
+
+          // Send message to Discord
+          await postToDiscord(DISCORD_CHANNELS, message, DISCORD_TOKEN);
+
+          return res
+            .status(200)
+            .json({ message: "Twitch event processed and sent to Discord" });
         } else {
           console.log(`Stream event received, but not for: ${TWITCH_USERNAME}`);
         }

@@ -1,36 +1,18 @@
 import axios from "axios";
 
-const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
-const TWITCH_USERNAME = process.env.TWITCH_USERNAME;
-const CHANNEL_IDS: string[] = process.env.DISCORD_CHANNELS?.split(",") || [];
-
-if (!DISCORD_TOKEN) {
-  console.error("❌ Missing DISCORD_TOKEN environment variable");
-}
-
-if (!TWITCH_USERNAME) {
-  console.error("❌ Missing TWITCH_USERNAME environment variable");
-}
-
-if (CHANNEL_IDS.length === 0) {
-  console.error(
-    "❌ Missing DISCORD_CHANNELS environment variable or it is empty"
-  );
-}
-
-const discordMessage = `🎉 I'm live! Come hang out with me! 😊 https://twitch.tv/${TWITCH_USERNAME}`;
-
-export const postToDiscord = async () => {
+export const postToDiscord = async (
+  channels: string[],
+  message: string,
+  discordToken: string
+) => {
   try {
-    for (const channelId of CHANNEL_IDS) {
+    for (const channelId of channels) {
       const response = await axios.post(
         `https://discord.com/api/v10/channels/${channelId}/messages`,
-        {
-          content: discordMessage,
-        },
+        { content: message },
         {
           headers: {
-            Authorization: `${DISCORD_TOKEN}`,
+            Authorization: `${discordToken}`,
             "Content-Type": "application/json",
           },
         }
