@@ -7,8 +7,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { channels, message } = req.body;
-      const discordToken = req.headers.authorization;
+      const { channels, message, discordToken } = req.body;
 
       if (!channels || !message || !discordToken) {
         return res.status(400).json({ error: "Missing required fields" });

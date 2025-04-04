@@ -4,6 +4,7 @@ const nextConfig = {
   env: {
     DISCORD_TOKEN: process.env.DISCORD_TOKEN,
     DISCORD_CHANNELS: process.env.DISCORD_CHANNELS,
+    DISCORD_API_SECRET: process.env.DISCORD_API_SECRET,
     TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
     TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET,
     TWITCH_OAUTH_TOKEN: process.env.TWITCH_OAUTH_TOKEN,

@@ -4,10 +4,10 @@ export const postToDiscord = async (
   channels: string[],
   message: string,
   discordToken: string
-) => {
+): Promise<{ success: boolean; error?: string }> => {
   try {
     for (const channelId of channels) {
-      const response = await axios.post(
+      await axios.post(
         `https://discord.com/api/v10/channels/${channelId}/messages`,
         { content: message },
         {
@@ -18,16 +18,19 @@ export const postToDiscord = async (
         }
       );
 
-      console.log(`✅ Posted to channel ${channelId}: ${response.status}`);
+      console.log(`✅ Posted to channel ${channelId}`);
     }
+
+    return { success: true };
   } catch (error: any) {
-    if (error.response) {
-      console.error(
-        "❌ Error posting to Discord:",
-        error.response?.data || error.message
-      );
-    } else {
-      console.error("❌ Unexpected error:", error);
-    }
+    console.error(
+      "❌ Error posting to Discord:",
+      error.response?.data || error.message
+    );
+
+    return {
+      success: false,
+      error: error.response?.data?.message || "Unknown error",
+    };
   }
 };
